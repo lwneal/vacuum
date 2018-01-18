@@ -12,7 +12,7 @@ class LeftBot():
 # RandomBot provably cleans any room. Given enough time.
 class RandomBot():
     def act(self, percepts):
-        return np.random.choice(ACTIONS)
+        return np.random.choice(['suck', 'left', 'forward'])
 
 
 # Scores 100% on the Turing test

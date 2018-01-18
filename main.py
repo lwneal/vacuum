@@ -3,8 +3,8 @@ import environments, agents
 
 MAX_ITERS = 100
 
-agent = agents.HumanBot()
-env = environments.VacuumWorld()
+agent = agents.RandomBot()
+env = environments.VacuumWorld(filename='squareworld.txt')
 
 for i in range(MAX_ITERS):
     time.sleep(.5)

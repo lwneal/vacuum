@@ -1,30 +1,31 @@
+# -*- coding: utf-8 -*-
 import sys
 import numpy as np
 
+ACTIONS = ['left', 'right', 'forward', 'suck', 'off']
 DIRTY, CLEAN, WALL = 0, 1, 2
-#character_map = ['D ', '  ', 'W ']
-character_map = ['\xf0\x9f\x92\xa9 ', '\xe2\xac\x9b ', '\xe2\xac\x9c ']
-robot_char_map = ['\xe2\x87\xa7 ', '\xe2\x87\xa8 ', '\xe2\x87\xa9 ', '\xe2\x87\xa6 ']
-
 NORTH, EAST, SOUTH, WEST = 0, 1, 2, 3
 velocity_map = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+UNICODE_ENABLED = True
 
-ACTIONS = ['left', 'right', 'forward', 'suck', 'off']
-
-
-def move(position, direction):
-    return position + velocity_map[direction]
-
+character_map = ['D ', '  ', 'W ']
+robot_char_map = ['^R', 'R>', 'VR', '<R']
+if UNICODE_ENABLED:
+    character_map = ['💩 ', '⬛ ', '⬜ ']
+    robot_char_map = ['⇧ ', '⇨ ', '⇩ ', '⇦ ']
 
 class VacuumWorld():
-    width = 10
-    height = 10
-    def __init__(self):
+    def __init__(self, filename=None):
+        # Default to a 10x10 random world
+        self.width = 10
+        self.height = 10
         # Each cell can be dirty, clean, or wall
         self.grid = np.random.randint(3, size=(self.height, self.width))
-        # Start the the bottom-left corner facing upwards
+        # Start at the bottom-left corner facing upwards
         self.x, self.y = 0, self.height - 1
         self.direction = NORTH
+        if filename:
+            self.load_from_file(filename)
 
     def get_percepts(self):
         # There are 3 percepts:
@@ -38,7 +39,6 @@ class VacuumWorld():
         }
 
     def update(self, action):
-        print(action)
         if action == 'off':
             pass
         elif action == 'suck':
@@ -65,6 +65,20 @@ class VacuumWorld():
                 else:
                     sys.stdout.write(character_map[square])
             sys.stdout.write('\n')
-        print(self.grid)
-        print("Direction: {}".format(self.direction))
-        print('Position: ({}, {})'.format(self.x, self.y))
+        sys.stdout.write('\n')
+
+
+    def load_from_file(self, filename):
+        lines = list(open(filename).readlines())
+        self.height = len(lines)
+        self.width = max(len(line) for line in lines)
+        self.grid = np.ones((self.height, self.width), int)
+        for y, line in enumerate(lines):
+            for x, char in enumerate(line):
+                if char == 'W':
+                    self.grid[y, x] = WALL
+                elif char == 'D':
+                    self.grid[y, x] = DIRTY
+                elif char == 'S':
+                    self.x, self.y = x, y
+        self.direction = NORTH
