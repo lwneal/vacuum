@@ -21,3 +21,6 @@ class HumanBot():
         print('Actions: {}'.format(ACTIONS))
         return raw_input('Select an action: ')
 
+# Add one here!
+class AddYourAgentHere():
+    pass
