@@ -71,7 +71,7 @@ class VacuumWorld():
     def load_from_file(self, filename):
         lines = list(open(filename).readlines())
         self.height = len(lines)
-        self.width = max(len(line) for line in lines)
+        self.width = max(len(line) for line in lines) - 1
         self.grid = np.ones((self.height, self.width), int)
         for y, line in enumerate(lines):
             for x, char in enumerate(line):

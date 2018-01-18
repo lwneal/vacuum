@@ -2,10 +2,11 @@ import time
 import environments, agents
 
 MAX_ITERS = 100
+agent = 'RandomBot'
+filename = 'bigworld.txt'
 
-agent = agents.RandomBot()
-env = environments.VacuumWorld(filename='squareworld.txt')
-
+agent = getattr(agents, agent)()
+env = environments.VacuumWorld(filename)
 for i in range(MAX_ITERS):
     time.sleep(.5)
     env.print_state()
