@@ -42,6 +42,53 @@ class RandomizedReflexAgent():
         if np.random.random() > 0.25:
             return 'forward'
         return 'right'
+        
+        
+#DeterministicModelBasedReflexAgent
+class DMBRA():
+    def __init__(self):
+        self.state = 0
+    
+    
+    def act(self, percepts):
+        wall = percepts['wall']
+        home = percepts['home']
+        print("state is : " + str(self.state))
+    
+        if percepts['dirt']:
+            return 'suck'
+        if self.state == 0:
+            if wall:
+                self.state = 1
+                return 'right'
+            else:
+                return 'forward'
+        if self.state == 1:
+            if wall:
+                return 'right'
+            else:
+                self.state = 2
+                return 'forward'
+        if self.state == 2:
+            self.state = 3
+            return 'right'
+        if self.state == 3:
+            if wall:
+                self.state = 4
+                return 'left'
+            else:
+                return 'forward'
+        if self.state == 4:
+            if wall:
+                return 'left'
+            else:
+                self.state = 5
+                return 'forward'
+        if self.state == 5:
+            self.state = 0
+            return 'left'
+        
+        raise ValueError("Unknown State")
 
 
 # The third agent for the assignment
