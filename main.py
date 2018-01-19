@@ -6,6 +6,7 @@ max_iters = 100
 agentname = 'RandomBot'
 filename = 'squareworld.txt'
 csv_mode = False
+time_to_90 = False
 if '--help' in sys.argv:
     print("Usage: python main.py RandomBot squareworld.txt 200")
     print("    Bots: LeftBot, RandomBot, HumanBot")
@@ -20,6 +21,9 @@ if '--graph' in sys.argv:
     sys.argv.remove('--graph')
     csv_mode = True
     print("time,dirt")
+if '--time-to-90' in sys.argv:
+    sys.argv.remove('--time-to-90')
+    time_to_90 = True
 
 if len(sys.argv) > 1:
     agentname = sys.argv[1]
@@ -31,9 +35,9 @@ if len(sys.argv) > 3:
 agent = getattr(agents, agentname)()
 env = environments.VacuumWorld(filename)
 for i in range(max_iters):
-    if not csv_mode:
+    if not csv_mode and not time_to_90:
         time.sleep(.5)
-    env.print_state(csv_mode)
+    env.print_state(csv_mode, time_to_90)
     percepts = env.get_percepts()
     action = agent.act(percepts)
     env.update(action)

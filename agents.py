@@ -34,16 +34,29 @@ class SimpleReflexAgent():
 
 # The second agent for the assignment
 class RandomizedReflexAgent():
+    p = 0.25
     def act(self, percepts):
         if percepts['dirt']:
             return 'suck'
         if percepts['wall']:
             return np.random.choice(['left', 'right'])
-        if np.random.random() > 0.25:
+        if np.random.random() > self.p:
             return 'forward'
         return 'right'
+
+
+class RandomizedReflexAgentA(RandomizedReflexAgent):
+    p = 0.1
+
+
+class RandomizedReflexAgentB(RandomizedReflexAgent):
+    p = 0.2
         
-        
+
+class RandomizedReflexAgentC(RandomizedReflexAgent):
+    p = 0.3
+
+
 #DeterministicModelBasedReflexAgent
 class DMBRA():
     def __init__(self):

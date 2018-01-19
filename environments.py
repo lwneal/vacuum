@@ -27,6 +27,7 @@ class VacuumWorld():
         if filename:
             self.load_from_file(filename)
         self.home_x, self.home_y = self.x, self.y
+        self.initial_dirt = (self.grid == DIRTY).sum()
 
     def get_percepts(self):
         # There are 3 percepts:
@@ -67,10 +68,16 @@ class VacuumWorld():
             raise ValueError("Unknown action {}".format(action))
         
 
-    def print_state(self, csv_mode=False):
+    def print_state(self, csv_mode=False, time_to_90_mode=False):
+        num_dirt = (self.grid == DIRTY).sum()
         if csv_mode:
-            num_dirt = (self.grid == DIRTY).sum()
             sys.stdout.write("{},{}\n".format(self.timestep, num_dirt))
+            return
+        elif time_to_90_mode:
+            dirtiness = float(num_dirt) / (self.initial_dirt)
+            if dirtiness <= 0.1:
+                print(self.timestep)
+                sys.exit()
             return
         for i, line in enumerate(self.grid):
             for j, square in enumerate(line):
