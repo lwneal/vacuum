@@ -6,13 +6,12 @@ ACTIONS = ['left', 'right', 'forward', 'suck', 'off']
 DIRTY, CLEAN, WALL = 0, 1, 2
 NORTH, EAST, SOUTH, WEST = 0, 1, 2, 3
 velocity_map = [(0, -1), (1, 0), (0, 1), (-1, 0)]
-UNICODE_ENABLED = True
 
-character_map = ['D ', '  ', 'W ']
-robot_char_map = ['^R', 'R>', 'VR', '<R']
-if UNICODE_ENABLED:
-    character_map = ['💩 ', '⬛ ', '⬜ ']
-    robot_char_map = ['⇧ ', '⇨ ', '⇩ ', '⇦ ']
+ascii_character_map = ['D ', '  ', 'W ']
+ascii_robot_char_map = ['^R', 'R>', 'VR', '<R']
+
+character_map = ['💩 ', '⬛ ', '⬜ ']
+robot_char_map = ['⇧ ', '⇨ ', '⇩ ', '⇦ ']
 
 class VacuumWorld():
     def __init__(self, filename=None):
@@ -24,8 +23,10 @@ class VacuumWorld():
         # Start at the bottom-left corner facing upwards
         self.x, self.y = 0, self.height - 1
         self.direction = NORTH
+        self.timestep = 0
         if filename:
             self.load_from_file(filename)
+        self.home_x, self.home_y = self.x, self.y
 
     def get_percepts(self):
         # There are 3 percepts:
@@ -33,12 +34,22 @@ class VacuumWorld():
         # a dirt sensor = 1 if the current square is dirty,
         # a home sensor = 1 if the current square is the starting location
         return {
-            'wall': 0,
-            'dirt': 1,
-            'home': 1,
+            'wall': self.hits_wall(),
+            'dirt': self.grid[self.y, self.x] == DIRTY,
+            'home': self.x == self.home_x and self.y == self.home_y,
         }
+    
+    def hits_wall(self):
+        dx, dy = velocity_map[self.direction]
+        new_x, new_y = self.x + dx, self.y + dy
+        if not 0 < new_x < self.width:
+            return True
+        if not 0 < new_y < self.height:
+            return True
+        return self.grid[new_y, new_x] == WALL
 
     def update(self, action):
+        self.timestep += 1
         if action == 'off':
             pass
         elif action == 'suck':
@@ -49,15 +60,14 @@ class VacuumWorld():
             self.direction = (self.direction - 1) % 4
         elif action == 'forward':
             dx, dy = velocity_map[self.direction]
-            new_x = np.clip(self.x + dx, 0, self.width - 1)
-            new_y = np.clip(self.y + dy, 0, self.height - 1)
-            if self.grid[new_y, new_x] != WALL:
-                self.x, self.y = new_x, new_y
+            if not self.hits_wall():
+                self.x += dx
+                self.y += dy
         else:
             raise ValueError("Unknown action {}".format(action))
         
 
-    def print_state(self):
+    def print_state(self, csv_filename=None):
         for i, line in enumerate(self.grid):
             for j, square in enumerate(line):
                 if (j, i) == (self.x, self.y):
@@ -66,6 +76,10 @@ class VacuumWorld():
                     sys.stdout.write(character_map[square])
             sys.stdout.write('\n')
         sys.stdout.write('\n')
+        if csv_filename:
+            num_dirt = (self.grid == DIRTY).sum()
+            with open(csv_filename, 'a') as fp:
+                fp.write("{},{}\n".format(timestamp, num_dirt))
 
 
     def load_from_file(self, filename):
