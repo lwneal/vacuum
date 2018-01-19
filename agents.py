@@ -21,6 +21,23 @@ class HumanBot():
         print('Actions: {}'.format(ACTIONS))
         return raw_input('Select an action: ')
 
-# Add one here!
-class AddYourAgentHere():
-    pass
+
+# The first agent for the assignment
+class SimpleReflexAgent():
+    def act(self, percepts):
+        # TODO: Implement
+        return 'forward'
+
+
+# The second agent for the assignment
+class RandomizedReflexAgent():
+    def act(self, percepts):
+        # TODO: Implement
+        return 'forward'
+
+
+# The third agent for the assignment
+class ModelBasedAgent():
+    def act(self, percepts):
+        # TODO: Implement
+        return 'forward'
