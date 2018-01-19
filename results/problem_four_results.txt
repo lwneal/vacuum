@@ -1,0 +1,12 @@
+♥ cat time_to_90_RandomizedReflexAgentA_EmptyRoom.txt | count
+Sum: 39920.0000 Mean: 798.4000 Stddev: 197.9602
+♥ cat time_to_90_RandomizedReflexAgentB_EmptyRoom.txt | count
+Sum: 30968.0000 Mean: 619.3600 Stddev: 139.3288
+♥ cat time_to_90_RandomizedReflexAgentC_EmptyRoom.txt | count
+Sum: 32078.0000 Mean: 641.5600 Stddev: 105.6171
+♥ cat time_to_90_RandomizedReflexAgentA_FourRooms.txt | count
+Sum: 50629.0000 Mean: 1012.5800 Stddev: 318.2652
+♥ cat time_to_90_RandomizedReflexAgentB_FourRooms.txt | count
+Sum: 39502.0000 Mean: 790.0400 Stddev: 212.8754
+♥ cat time_to_90_RandomizedReflexAgentC_FourRooms.txt | count
+Sum: 43315.0000 Mean: 866.3000 Stddev: 322.3783
