@@ -67,7 +67,11 @@ class VacuumWorld():
             raise ValueError("Unknown action {}".format(action))
         
 
-    def print_state(self, csv_filename=None):
+    def print_state(self, csv_mode=False):
+        if csv_mode:
+            num_dirt = (self.grid == DIRTY).sum()
+            sys.stdout.write("{},{}\n".format(self.timestep, num_dirt))
+            return
         for i, line in enumerate(self.grid):
             for j, square in enumerate(line):
                 if (j, i) == (self.x, self.y):
@@ -76,10 +80,6 @@ class VacuumWorld():
                     sys.stdout.write(character_map[square])
             sys.stdout.write('\n')
         sys.stdout.write('\n')
-        if csv_filename:
-            num_dirt = (self.grid == DIRTY).sum()
-            with open(csv_filename, 'a') as fp:
-                fp.write("{},{}\n".format(timestamp, num_dirt))
 
 
     def load_from_file(self, filename):
