@@ -25,15 +25,23 @@ class HumanBot():
 # The first agent for the assignment
 class SimpleReflexAgent():
     def act(self, percepts):
-        # TODO: Implement
+        if percepts['dirt']:
+            return 'suck'
+        if percepts['wall']:
+            return 'left'
         return 'forward'
 
 
 # The second agent for the assignment
 class RandomizedReflexAgent():
     def act(self, percepts):
-        # TODO: Implement
-        return 'forward'
+        if percepts['dirt']:
+            return 'suck'
+        if percepts['wall']:
+            return np.random.choice(['left', 'right'])
+        if np.random.random() > 0.25:
+            return 'forward'
+        return 'right'
 
 
 # The third agent for the assignment
