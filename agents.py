@@ -53,7 +53,7 @@ class DMBRA():
     def act(self, percepts):
         wall = percepts['wall']
         home = percepts['home']
-        print("state is : " + str(self.state))
+        #print("state is : " + str(self.state))
     
         if percepts['dirt']:
             return 'suck'
@@ -91,8 +91,4 @@ class DMBRA():
         raise ValueError("Unknown State")
 
 
-# The third agent for the assignment
-class ModelBasedAgent():
-    def act(self, percepts):
-        # TODO: Implement
-        return 'forward'
+ModelBasedAgent = DMBRA
